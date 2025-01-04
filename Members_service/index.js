@@ -1,11 +1,13 @@
 const express = require('express');
 const db = require('./db');
+const cors = require('cors')
 
 const app = express();
 const PORT = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors())
 
 // GET all members
 app.get('/', (req, res) => {
@@ -81,6 +83,41 @@ app.delete('/:id', (req, res) => {
       res.status(204).send();
     }
   });
+});
+
+// POST 5 members if they don't exist
+app.post('/bulk', async (req, res) => {
+  const members = [
+    { name: 'Member 1', email: 'member1@example.com' },
+    { name: 'Member 2', email: 'member2@example.com' },
+    { name: 'Member 3', email: 'member3@example.com' },
+    { name: 'Member 4', email: 'member4@example.com' },
+    { name: 'Member 5', email: 'member5@example.com' },
+  ];
+
+  try {
+    for (const member of members) {
+      const { name, email } = member;
+
+      console.log([ name, email ])
+
+      // Check if the member already exists using their unique email
+      db.query('SELECT * FROM members WHERE email = ?', [email], (err, result) => {
+        if (result.length === 0) {
+          // Member does not exist, insert them
+          db.query('INSERT INTO members (name, email) VALUES (?, ?)', [name, email]);
+          console.log(`Added member: ${name} with email ${email}`);
+        } else {
+          console.log(`Member already exists: ${name} with email ${email}`);
+        }
+      });
+    }
+
+    res.status(201).json({ message: 'Bulk member addition completed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 app.listen(PORT, () => {

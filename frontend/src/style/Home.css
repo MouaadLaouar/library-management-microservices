@@ -1,0 +1,29 @@
+.Home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Home > h1 {
+    margin-bottom: 20px;
+}
+
+.Home > ul > a {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.Home > ul > a > li {
+    background-color: #D0DDD0;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+
+    list-style: none;
+}

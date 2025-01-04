@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  frontend:
+    build: ./frontend
+    image: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api_gateway
+
+  
   Members:
     build: ./Members_service
     image: members
@@ -35,7 +44,7 @@ services:
     build: ./api-gateway
     image: api-gateway
     ports:
-      - "8888:8888"
+      - "8080:8080"
     # restart: always
     depends_on:
       - Members

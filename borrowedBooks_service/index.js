@@ -1,11 +1,13 @@
 const express = require('express');
 const db = require('./db');
+const cors = require('cors')
 
 const app = express();
 const PORT = 3002;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors())
 
 // GET all borrowed books
 app.get('/', (req, res) => {
